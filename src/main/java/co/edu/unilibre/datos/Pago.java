@@ -24,8 +24,9 @@ public class Pago {
 	    return this.moto;
 	}
 
-	public Pago(int valor, Moto moto) {
+	public Pago(int valor, TipoPago tipoPago, Moto moto) {
 	    this.valor = valor;
+		this.tipoPago = tipoPago;
 		this.moto = moto;
 	}
 }

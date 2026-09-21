@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * Parqueadero
  */
 public class Parqueadero {
-    private ArrayList<Moto> motos;
+    private ArrayList<Registro> motosParqueadas;
     private ArrayList<Pago> pagos;
     private ArrayList<Registro> registros;
 
-    public ArrayList<Moto> obtenerMotos() {
-        return this.motos;
+    public ArrayList<Registro> obtenerMotos() {
+        return this.motosParqueadas;
     }
 
     public ArrayList<Pago> obtenerPagos() {
@@ -23,8 +23,8 @@ public class Parqueadero {
     }
 
     public Parqueadero () {
-        this.motos = new ArrayList<Moto>();
-        this.pagos = new ArrayList<Pago>();
-        this.registros = new ArrayList<Registro>();
+        this.motosParqueadas = new ArrayList<>();
+        this.pagos = new ArrayList<>();
+        this.registros = new ArrayList<>();
     }
 }

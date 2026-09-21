@@ -1,5 +1,6 @@
 package co.edu.unilibre.interaccion;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -8,6 +9,7 @@ import org.junit.Test;
 
 import co.edu.unilibre.datos.Moto;
 import co.edu.unilibre.datos.Parqueadero;
+import co.edu.unilibre.datos.TipoPago;
 
 /**
  * TestGestorParqueadero
@@ -57,13 +59,49 @@ public class TestGestorParqueadero {
         assertFalse(res);
     }
 
+    @Test
+	public void registrarEntradaMotoFail2() {
+	    Moto mt = new Moto("ABC 123", "132432564");
+	    gestor.registrarEntradaMoto(parqueadero, mt);
+
+		Moto mt2 = new Moto("ABC 123", "132432564");
+	    boolean res = gestor.registrarEntradaMoto(parqueadero, mt2);
+		assertFalse(res);
+	}
+
 	@Test
     public void registrarSalidaMotoOk() {
+        Moto mt = new Moto("ABC 123", "132432564");
+	    gestor.registrarEntradaMoto(parqueadero, mt);
 
+		boolean res = gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
+		assertTrue(res);
     }
 
     @Test
     public void registrarSalidaMotoFail() {
+        Moto mt = new Moto("ABC 123", "132432564");
+        boolean res = gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
+		assertFalse(res);
+    }
 
+    @Test
+    public void registrarSalidaMotoFailDobleSalida() {
+        Moto mt = new Moto("ABC 123", "132432564");
+        gestor.registrarEntradaMoto(parqueadero, mt);
+
+        gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
+
+        boolean res = gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
+        assertFalse(res);
+    }
+
+    @Test
+    public void registrarPagoOk() {
+        Moto mt = new Moto("ABC 123", "132432564");
+        gestor.registrarEntradaMoto(parqueadero, mt);
+
+        gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
+        assertEquals(1, parqueadero.obtenerPagos().size());
     }
 }
