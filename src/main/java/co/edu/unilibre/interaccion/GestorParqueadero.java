@@ -1,7 +1,12 @@
 package co.edu.unilibre.interaccion;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import co.edu.unilibre.datos.Estado;
 import co.edu.unilibre.datos.Moto;
@@ -76,7 +81,34 @@ public class GestorParqueadero {
         return (int) (minutosTranscurridos * 40);
 	}
 
-	public boolean generarReporte() {
-	    return true;
+	public boolean generarReporte(Parqueadero pq) {
+    	DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    	LocalDate hoy = LocalDate.now();
+        String txtHoy = hoy.format(formateador);
+
+        int ganancias = 0;
+
+        for (Pago pg : pq.obtenerPagos()) {
+            ganancias += pg.obtenerValor();
+        }
+
+        List<Registro> registrosUnicos = new ArrayList<>();
+
+        for (Registro rg : pq.obtenerRegistros()) {
+            if (rg.obtenerHora().getDayOfMonth() == hoy.getDayOfMonth() && rg.obtenerEstado() == Estado.SALIDA) {
+                registrosUnicos.add(rg);
+            }
+        }
+
+	    try (FileWriter writer = new FileWriter("reporte.txt")) {
+            writer.write("Reporte del dia " + txtHoy + "\n");
+            writer.write("Total motos: " + (registrosUnicos.size() + pq.obtenerMotos().size()) + "\n");
+            writer.write("#Motos que ya pagaron: " + registrosUnicos.size() + "\n");
+            writer.write("#Motos parqueadas actualmente: " + pq.obtenerMotos().size() + "\n");
+            writer.write("Total ganancias: " + ganancias + "\n");
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
 	}
 }

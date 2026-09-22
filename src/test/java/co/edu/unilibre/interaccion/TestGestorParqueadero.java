@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +33,14 @@ public class TestGestorParqueadero {
 	    boolean res = gestor.registrarEntradaMoto(parqueadero, mt);
 		assertTrue(res);
 	}
+
+    @Test
+    public void registrarEntradaMotoOk2() {
+        Moto mt = new Moto("ABC 123", "132432564");
+        mt.modificarMarca("Yamaha");
+        boolean res = gestor.registrarEntradaMoto(parqueadero, mt);
+        assertTrue(res);
+    }
 
 	@Test
     public void registrarEntradaMotoFail() {
@@ -103,5 +113,15 @@ public class TestGestorParqueadero {
 
         gestor.registrarSalidaMoto(parqueadero, mt.obtenerPlaca(), TipoPago.EFECTIVO);
         assertEquals(1, parqueadero.obtenerPagos().size());
+    }
+
+    @Test
+    public void generarReporteOK() {
+        File reporte = new File("reporte.txt");
+
+        boolean res = gestor.generarReporte(parqueadero);
+        assertTrue(res);
+
+        reporte.delete();
     }
 }
